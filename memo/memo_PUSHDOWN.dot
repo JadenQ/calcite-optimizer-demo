@@ -1,0 +1,144 @@
+Root: rel#19:RelSubset#5.ENUMERABLE
+Original rel:
+EnumerableSort(subset=[rel#19:RelSubset#5.ENUMERABLE], sort0=[$0], sort1=[$1], dir0=[ASC], dir1=[ASC]): rowcount = 225.0, cumulative cost = {225.0 rows, 29246.942171903866 cpu, 0.0 io}, id = 36
+  EnumerableCalc(subset=[rel#35:RelSubset#4.ENUMERABLE], expr#0..16=[{inputs}], C_NAME=[$t1], O_ORDERKEY=[$t8], O_ORDERDATE=[$t12]): rowcount = 225.0, cumulative cost = {225.0 rows, 4500.0 cpu, 0.0 io}, id = 46
+    EnumerableHashJoin(subset=[rel#42:RelSubset#3.ENUMERABLE], condition=[=($0, $9)], joinType=[inner]): rowcount = 225.0, cumulative cost = {701.5170185988092 rows, 0.0 cpu, 0.0 io}, id = 45
+      LuceneToEnumerableConverter(subset=[rel#25:RelSubset#0.ENUMERABLE]): rowcount = 100.0, cumulative cost = {100.0 rows, 100.0 cpu, 0.0 io}, id = 38
+        LuceneTableScan(subset=[rel#22:RelSubset#0.LUCENE], table=[[CUSTOMER]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 21
+      EnumerableCalc(subset=[rel#44:RelSubset#6.ENUMERABLE], expr#0..8=[{inputs}], expr#9=['F':VARCHAR], expr#10=[=($t2, $t9)], proj#0..8=[{exprs}], $condition=[$t10]): rowcount = 15.0, cumulative cost = {15.0 rows, 2100.0 cpu, 0.0 io}, id = 47
+        LuceneToEnumerableConverter(subset=[rel#26:RelSubset#1.ENUMERABLE]): rowcount = 100.0, cumulative cost = {100.0 rows, 100.0 cpu, 0.0 io}, id = 40
+          LuceneTableScan(subset=[rel#24:RelSubset#1.LUCENE], table=[[ORDERS]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 23
+
+Sets:
+Set#0, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)
+	rel#9:RelSubset#0.NONE, best=null
+		rel#1:LogicalTableScan.NONE(table=[CUSTOMER]), rowcount=100.0, cumulative cost={inf}
+	rel#22:RelSubset#0.LUCENE, best=rel#21
+		rel#21:LuceneTableScan.LUCENE(table=[CUSTOMER]), rowcount=100.0, cumulative cost={100.0 rows, 101.0 cpu, 0.0 io}
+	rel#25:RelSubset#0.ENUMERABLE, best=rel#38
+		rel#38:LuceneToEnumerableConverter.ENUMERABLE(input=RelSubset#22), rowcount=100.0, cumulative cost={200.0 rows, 201.0 cpu, 0.0 io}
+Set#1, type: RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#10:RelSubset#1.NONE, best=null
+		rel#3:LogicalTableScan.NONE(table=[ORDERS]), rowcount=100.0, cumulative cost={inf}
+	rel#24:RelSubset#1.LUCENE, best=rel#23
+		rel#23:LuceneTableScan.LUCENE(table=[ORDERS]), rowcount=100.0, cumulative cost={100.0 rows, 101.0 cpu, 0.0 io}
+	rel#26:RelSubset#1.ENUMERABLE, best=rel#40
+		rel#40:LuceneToEnumerableConverter.ENUMERABLE(input=RelSubset#24), rowcount=100.0, cumulative cost={200.0 rows, 201.0 cpu, 0.0 io}
+Set#2, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#12:RelSubset#2.NONE, best=null
+		rel#11:LogicalJoin.NONE(left=RelSubset#9,right=RelSubset#10,condition==($0, $9),joinType=left), rowcount=1585.0, cumulative cost={inf}
+	rel#28:RelSubset#2.ENUMERABLE, best=rel#27
+		rel#27:EnumerableHashJoin.ENUMERABLE(left=RelSubset#25,right=RelSubset#26,condition==($0, $9),joinType=left), rowcount=1585.0, cumulative cost={2546.517018598809 rows, 402.0 cpu, 0.0 io}
+Set#3, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#14:RelSubset#3.NONE, best=null
+		rel#13:LogicalFilter.NONE(input=RelSubset#12,condition==($10, 'F')), rowcount=237.75, cumulative cost={inf}
+		rel#29:LogicalCalc.NONE(input=RelSubset#12,expr#0..16={inputs},expr#17='F':VARCHAR,expr#18==($t10, $t17),proj#0..16={exprs},$condition=$t18), rowcount=237.75, cumulative cost={inf}
+		rel#33:LogicalJoin.NONE(left=RelSubset#9,right=RelSubset#32,condition==($0, $9),joinType=inner), rowcount=225.0, cumulative cost={inf}
+	rel#42:RelSubset#3.ENUMERABLE, best=rel#45
+		rel#41:EnumerableCalc.ENUMERABLE(input=RelSubset#28,expr#0..16={inputs},expr#17='F':VARCHAR,expr#18==($t10, $t17),proj#0..16={exprs},$condition=$t18), rowcount=237.75, cumulative cost={2784.267018598809 rows, 59047.0 cpu, 0.0 io}
+		rel#45:EnumerableHashJoin.ENUMERABLE(left=RelSubset#25,right=RelSubset#44,condition==($0, $9),joinType=inner), rowcount=225.0, cumulative cost={1116.517018598809 rows, 2502.0 cpu, 0.0 io}
+Set#4, type: RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)
+	rel#16:RelSubset#4.NONE, best=null
+		rel#15:LogicalProject.NONE(input=RelSubset#14,exprs=[$1, $8, $12]), rowcount=237.75, cumulative cost={inf}
+		rel#34:LogicalCalc.NONE(input=RelSubset#14,expr#0..16={inputs},0=$t1,1=$t8,2=$t12), rowcount=237.75, cumulative cost={inf}
+	rel#35:RelSubset#4.ENUMERABLE, best=rel#46
+		rel#46:EnumerableCalc.ENUMERABLE(input=RelSubset#42,expr#0..16={inputs},0=$t1,1=$t8,2=$t12), rowcount=225.0, cumulative cost={1341.517018598809 rows, 7002.0 cpu, 0.0 io}
+Set#5, type: RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)
+	rel#18:RelSubset#5.NONE, best=null
+		rel#17:LogicalSort.NONE(input=RelSubset#16,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC), rowcount=237.75, cumulative cost={inf}
+	rel#19:RelSubset#5.ENUMERABLE, best=rel#36
+		rel#20:AbstractConverter.ENUMERABLE(input=RelSubset#18,convention=ENUMERABLE), rowcount=237.75, cumulative cost={inf}
+		rel#36:EnumerableSort.ENUMERABLE(input=RelSubset#35,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC), rowcount=225.0, cumulative cost={1566.517018598809 rows, 36248.942171903866 cpu, 0.0 io}
+Set#6, type: RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#32:RelSubset#6.NONE, best=null
+		rel#30:LogicalFilter.NONE(input=RelSubset#10,condition==($2, 'F')), rowcount=15.0, cumulative cost={inf}
+		rel#43:LogicalCalc.NONE(input=RelSubset#10,expr#0..8={inputs},expr#9='F':VARCHAR,expr#10==($t2, $t9),proj#0..8={exprs},$condition=$t10), rowcount=15.0, cumulative cost={inf}
+	rel#44:RelSubset#6.ENUMERABLE, best=rel#47
+		rel#47:EnumerableCalc.ENUMERABLE(input=RelSubset#26,expr#0..8={inputs},expr#9='F':VARCHAR,expr#10==($t2, $t9),proj#0..8={exprs},$condition=$t10), rowcount=15.0, cumulative cost={215.0 rows, 2301.0 cpu, 0.0 io}
+
+Graphviz:
+digraph G {
+	root [style=filled,label="Root"];
+	subgraph cluster0{
+		label="Set 0 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)";
+		rel1 [label="rel#1:LogicalTableScan\ntable=[CUSTOMER]\nrows=100.0, cost={inf}",shape=box]
+		rel21 [label="rel#21:LuceneTableScan\ntable=[CUSTOMER]\nrows=100.0, cost={100.0 rows, 101.0 cpu, 0.0 io}",color=blue,shape=box]
+		rel38 [label="rel#38:LuceneToEnumerableConverter\ninput=RelSubset#22\nrows=100.0, cost={200.0 rows, 201.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset9 [label="rel#9:RelSubset#0.NONE"]
+		subset22 [label="rel#22:RelSubset#0.LUCENE"]
+		subset25 [label="rel#25:RelSubset#0.ENUMERABLE"]
+	}
+	subgraph cluster1{
+		label="Set 1 RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel3 [label="rel#3:LogicalTableScan\ntable=[ORDERS]\nrows=100.0, cost={inf}",shape=box]
+		rel23 [label="rel#23:LuceneTableScan\ntable=[ORDERS]\nrows=100.0, cost={100.0 rows, 101.0 cpu, 0.0 io}",color=blue,shape=box]
+		rel40 [label="rel#40:LuceneToEnumerableConverter\ninput=RelSubset#24\nrows=100.0, cost={200.0 rows, 201.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset10 [label="rel#10:RelSubset#1.NONE"]
+		subset24 [label="rel#24:RelSubset#1.LUCENE"]
+		subset26 [label="rel#26:RelSubset#1.ENUMERABLE"]
+	}
+	subgraph cluster2{
+		label="Set 2 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel11 [label="rel#11:LogicalJoin\nleft=RelSubset#9,right=RelSubset#10,condition==($0, $9),joinType=left\nrows=1585.0, cost={inf}",shape=box]
+		rel27 [label="rel#27:EnumerableHashJoin\nleft=RelSubset#25,right=RelSubset#26,condition==($0, $9),joinType=left\nrows=1585.0, cost={2546.517018598809 rows, 402.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset12 [label="rel#12:RelSubset#2.NONE"]
+		subset28 [label="rel#28:RelSubset#2.ENUMERABLE"]
+	}
+	subgraph cluster3{
+		label="Set 3 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel13 [label="rel#13:LogicalFilter\ninput=RelSubset#12,condition==($10, 'F')\nrows=237.75, cost={inf}",shape=box]
+		rel29 [label="rel#29:LogicalCalc\ninput=RelSubset#12,expr#0..16={inputs},expr#17='F':VARCHAR,expr#18==($t10, $t17),proj#0..16={exprs},$condition=$t18\nrows=237.75, cost={inf}",shape=box]
+		rel33 [label="rel#33:LogicalJoin\nleft=RelSubset#9,right=RelSubset#32,condition==($0, $9),joinType=inner\nrows=225.0, cost={inf}",shape=box]
+		rel41 [label="rel#41:EnumerableCalc\ninput=RelSubset#28,expr#0..16={inputs},expr#17='F':VARCHAR,expr#18==($t10, $t17),proj#0..16={exprs},$condition=$t18\nrows=237.75, cost={2784.267018598809 rows, 59047.0 cpu, 0.0 io}",shape=box]
+		rel45 [label="rel#45:EnumerableHashJoin\nleft=RelSubset#25,right=RelSubset#44,condition==($0, $9),joinType=inner\nrows=225.0, cost={1116.517018598809 rows, 2502.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset14 [label="rel#14:RelSubset#3.NONE"]
+		subset42 [label="rel#42:RelSubset#3.ENUMERABLE"]
+	}
+	subgraph cluster4{
+		label="Set 4 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)";
+		rel15 [label="rel#15:LogicalProject\ninput=RelSubset#14,exprs=[$1, $8, $12]\nrows=237.75, cost={inf}",shape=box]
+		rel34 [label="rel#34:LogicalCalc\ninput=RelSubset#14,expr#0..16={inputs},0=$t1,1=$t8,2=$t12\nrows=237.75, cost={inf}",shape=box]
+		rel46 [label="rel#46:EnumerableCalc\ninput=RelSubset#42,expr#0..16={inputs},0=$t1,1=$t8,2=$t12\nrows=225.0, cost={1341.517018598809 rows, 7002.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset16 [label="rel#16:RelSubset#4.NONE"]
+		subset35 [label="rel#35:RelSubset#4.ENUMERABLE"]
+	}
+	subgraph cluster5{
+		label="Set 5 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)";
+		rel17 [label="rel#17:LogicalSort\ninput=RelSubset#16,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC\nrows=237.75, cost={inf}",shape=box]
+		rel20 [label="rel#20:AbstractConverter\ninput=RelSubset#18,convention=ENUMERABLE\nrows=237.75, cost={inf}",shape=box]
+		rel36 [label="rel#36:EnumerableSort\ninput=RelSubset#35,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC\nrows=225.0, cost={1566.517018598809 rows, 36248.942171903866 cpu, 0.0 io}",color=blue,shape=box]
+		subset18 [label="rel#18:RelSubset#5.NONE"]
+		subset19 [label="rel#19:RelSubset#5.ENUMERABLE"]
+	}
+	subgraph cluster6{
+		label="Set 6 RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel30 [label="rel#30:LogicalFilter\ninput=RelSubset#10,condition==($2, 'F')\nrows=15.0, cost={inf}",shape=box]
+		rel43 [label="rel#43:LogicalCalc\ninput=RelSubset#10,expr#0..8={inputs},expr#9='F':VARCHAR,expr#10==($t2, $t9),proj#0..8={exprs},$condition=$t10\nrows=15.0, cost={inf}",shape=box]
+		rel47 [label="rel#47:EnumerableCalc\ninput=RelSubset#26,expr#0..8={inputs},expr#9='F':VARCHAR,expr#10==($t2, $t9),proj#0..8={exprs},$condition=$t10\nrows=15.0, cost={215.0 rows, 2301.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset32 [label="rel#32:RelSubset#6.NONE"]
+		subset44 [label="rel#44:RelSubset#6.ENUMERABLE"]
+	}
+	root -> subset19;
+	subset9 -> rel1;
+	subset22 -> rel21[color=blue];
+	subset25 -> rel38[color=blue]; rel38 -> subset22[color=blue];
+	subset10 -> rel3;
+	subset24 -> rel23[color=blue];
+	subset26 -> rel40[color=blue]; rel40 -> subset24[color=blue];
+	subset12 -> rel11; rel11 -> subset9[label="0"]; rel11 -> subset10[label="1"];
+	subset28 -> rel27[color=blue]; rel27 -> subset25[color=blue,label="0"]; rel27 -> subset26[color=blue,label="1"];
+	subset14 -> rel13; rel13 -> subset12;
+	subset14 -> rel29; rel29 -> subset12;
+	subset14 -> rel33; rel33 -> subset9[label="0"]; rel33 -> subset32[label="1"];
+	subset42 -> rel41; rel41 -> subset28;
+	subset42 -> rel45[color=blue]; rel45 -> subset25[color=blue,label="0"]; rel45 -> subset44[color=blue,label="1"];
+	subset16 -> rel15; rel15 -> subset14;
+	subset16 -> rel34; rel34 -> subset14;
+	subset35 -> rel46[color=blue]; rel46 -> subset42[color=blue];
+	subset18 -> rel17; rel17 -> subset16;
+	subset19 -> rel20; rel20 -> subset18;
+	subset19 -> rel36[color=blue]; rel36 -> subset35[color=blue];
+	subset32 -> rel30; rel30 -> subset10;
+	subset32 -> rel43; rel43 -> subset10;
+	subset44 -> rel47[color=blue]; rel47 -> subset26[color=blue];
+}

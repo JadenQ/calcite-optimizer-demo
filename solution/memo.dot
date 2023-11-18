@@ -1,0 +1,45 @@
+Root: rel#122:RelSubset#2.ENUMERABLE
+Original rel:
+LogicalProject(subset=[rel#122:RelSubset#2.ENUMERABLE], C_NAME=[$1]): rowcount = 25.0, cumulative cost = {25.0 rows, 25.0 cpu, 0.0 io}, id = 120
+  LogicalFilter(subset=[rel#119:RelSubset#1.NONE], condition=[AND(<($0, 10086), <($0, 10087))]): rowcount = 25.0, cumulative cost = {25.0 rows, 100.0 cpu, 0.0 io}, id = 118
+    LogicalTableScan(subset=[rel#117:RelSubset#0.NONE], table=[[CUSTOMER]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 114
+
+Sets:
+Set#0, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)
+	rel#117:RelSubset#0.NONE, best=null
+		rel#114:LogicalTableScan.NONE(table=[CUSTOMER]), rowcount=100.0, cumulative cost={inf}
+Set#1, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)
+	rel#119:RelSubset#1.NONE, best=null
+		rel#118:LogicalFilter.NONE(input=RelSubset#117,condition=AND(<($0, 10086), <($0, 10087))), rowcount=25.0, cumulative cost={inf}
+Set#2, type: RecordType(VARCHAR C_NAME)
+	rel#121:RelSubset#2.NONE, best=null
+		rel#120:LogicalProject.NONE(input=RelSubset#119,exprs=[$1]), rowcount=25.0, cumulative cost={inf}
+	rel#122:RelSubset#2.ENUMERABLE, best=null
+		rel#123:AbstractConverter.ENUMERABLE(input=RelSubset#121,convention=ENUMERABLE), rowcount=25.0, cumulative cost={inf}
+
+Graphviz:
+digraph G {
+	root [style=filled,label="Root"];
+	subgraph cluster0{
+		label="Set 0 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)";
+		rel114 [label="rel#114:LogicalTableScan\ntable=[CUSTOMER]\nrows=100.0, cost={inf}",shape=box]
+		subset117 [label="rel#117:RelSubset#0.NONE"]
+	}
+	subgraph cluster1{
+		label="Set 1 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)";
+		rel118 [label="rel#118:LogicalFilter\ninput=RelSubset#117,condition=AND(<($0, 10086), <($0, 10087))\nrows=25.0, cost={inf}",shape=box]
+		subset119 [label="rel#119:RelSubset#1.NONE"]
+	}
+	subgraph cluster2{
+		label="Set 2 RecordType(VARCHAR C_NAME)";
+		rel120 [label="rel#120:LogicalProject\ninput=RelSubset#119,exprs=[$1]\nrows=25.0, cost={inf}",shape=box]
+		rel123 [label="rel#123:AbstractConverter\ninput=RelSubset#121,convention=ENUMERABLE\nrows=25.0, cost={inf}",shape=box]
+		subset121 [label="rel#121:RelSubset#2.NONE"]
+		subset122 [label="rel#122:RelSubset#2.ENUMERABLE",color=red]
+	}
+	root -> subset122;
+	subset117 -> rel114;
+	subset119 -> rel118; rel118 -> subset117;
+	subset121 -> rel120; rel120 -> subset119;
+	subset122 -> rel123; rel123 -> subset121;
+}

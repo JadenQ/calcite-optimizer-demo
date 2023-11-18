@@ -1,0 +1,101 @@
+
+digraph G {
+	root [style=filled,label="Root"];
+	subgraph cluster0{
+		label="Set 0 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)";
+		rel1 [label="rel#1:LogicalTableScan\ntable=[CUSTOMER]\nrows=100.0, cost={inf}",shape=box]
+		rel21 [label="rel#21:EnumerableTableScan\ntable=[CUSTOMER]\nrows=100.0, cost={100.0 rows, 101.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset9 [label="rel#9:RelSubset#0.NONE"]
+		subset22 [label="rel#22:RelSubset#0.ENUMERABLE"]
+	}
+	subgraph cluster1{
+		label="Set 1 RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel3 [label="rel#3:LogicalTableScan\ntable=[ORDERS]\nrows=100.0, cost={inf}",shape=box]
+		rel23 [label="rel#23:EnumerableTableScan\ntable=[ORDERS]\nrows=100.0, cost={100.0 rows, 101.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset10 [label="rel#10:RelSubset#1.NONE"]
+		subset24 [label="rel#24:RelSubset#1.ENUMERABLE"]
+	}
+	subgraph cluster2{
+		label="Set 2 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel11 [label="rel#11:LogicalJoin\nleft=RelSubset#9,right=RelSubset#10,condition==($0, $9),joinType=left\nrows=1585.0, cost={inf}",shape=box]
+		rel25 [label="rel#25:EnumerableHashJoin\nleft=RelSubset#22,right=RelSubset#24,condition==($0, $9),joinType=left\nrows=1585.0, cost={2346.517018598809 rows, 202.0 cpu, 0.0 io}",color=blue,shape=box]
+		rel28 [label="rel#28:MultiJoin\ninput#0=RelSubset#9,input#1=RelSubset#10,joinFilter=true,isFullOuterJoin=false,joinTypes=[INNER, LEFT],outerJoinConditions=[NULL, =($0, $9)],projFields=[ALL, ALL]\nrows=1.0, cost={inf}",shape=box]
+		rel40 [label="rel#40:LogicalProject\ninput=RelSubset#39,exprs=[$9, $10, $11, $12, $13, $14, $15, $16, $0, $1, $2, $3, $4, $5, $6, $7, $8]\nrows=1585.0, cost={inf}",shape=box]
+		rel53 [label="rel#53:LogicalCalc\ninput=RelSubset#39,expr#0..16={inputs},0=$t9,1=$t10,2=$t11,3=$t12,4=$t13,5=$t14,6=$t15,7=$t16,8=$t0,9=$t1,10=$t2,11=$t3,12=$t4,13=$t5,14=$t6,15=$t7,16=$t8\nrows=1585.0, cost={inf}",shape=box]
+		rel60 [label="rel#60:EnumerableCalc\ninput=RelSubset#50,expr#0..16={inputs},0=$t9,1=$t10,2=$t11,3=$t12,4=$t13,5=$t14,6=$t15,7=$t16,8=$t0,9=$t1,10=$t2,11=$t3,12=$t4,13=$t5,14=$t6,15=$t7,16=$t8\nrows=1585.0, cost={3931.517018598809 rows, 54092.0 cpu, 0.0 io}",shape=box]
+		subset12 [label="rel#12:RelSubset#2.NONE"]
+		subset26 [label="rel#26:RelSubset#2.ENUMERABLE"]
+	}
+	subgraph cluster3{
+		label="Set 3 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel13 [label="rel#13:LogicalFilter\ninput=RelSubset#12,condition==($10, 'F')\nrows=237.75, cost={inf}",shape=box]
+		rel29 [label="rel#29:LogicalCalc\ninput=RelSubset#12,expr#0..16={inputs},expr#17='F':VARCHAR,expr#18==($t10, $t17),proj#0..16={exprs},$condition=$t18\nrows=237.75, cost={inf}",shape=box]
+		rel33 [label="rel#33:LogicalJoin\nleft=RelSubset#9,right=RelSubset#32,condition==($0, $9),joinType=inner\nrows=225.0, cost={inf}",shape=box]
+		rel41 [label="rel#41:EnumerableCalc\ninput=RelSubset#26,expr#0..16={inputs},expr#17='F':VARCHAR,expr#18==($t10, $t17),proj#0..16={exprs},$condition=$t18\nrows=237.75, cost={2584.267018598809 rows, 58847.0 cpu, 0.0 io}",shape=box]
+		rel45 [label="rel#45:EnumerableHashJoin\nleft=RelSubset#22,right=RelSubset#44,condition==($0, $9),joinType=inner\nrows=225.0, cost={916.5170185988092 rows, 2302.0 cpu, 0.0 io}",color=blue,shape=box]
+		rel47 [label="rel#47:MultiJoin\ninput#0=RelSubset#9,input#1=RelSubset#32,joinFilter==($0, $9),isFullOuterJoin=false,joinTypes=[INNER, INNER],outerJoinConditions=[NULL, NULL],projFields=[ALL, ALL]\nrows=1.0, cost={inf}",shape=box]
+		subset14 [label="rel#14:RelSubset#3.NONE"]
+		subset42 [label="rel#42:RelSubset#3.ENUMERABLE"]
+	}
+	subgraph cluster4{
+		label="Set 4 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)";
+		rel15 [label="rel#15:LogicalProject\ninput=RelSubset#14,exprs=[$1, $8, $12]\nrows=237.75, cost={inf}",shape=box]
+		rel34 [label="rel#34:LogicalCalc\ninput=RelSubset#14,expr#0..16={inputs},0=$t1,1=$t8,2=$t12\nrows=237.75, cost={inf}",shape=box]
+		rel48 [label="rel#48:EnumerableCalc\ninput=RelSubset#42,expr#0..16={inputs},0=$t1,1=$t8,2=$t12\nrows=225.0, cost={1141.517018598809 rows, 6802.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset16 [label="rel#16:RelSubset#4.NONE"]
+		subset35 [label="rel#35:RelSubset#4.ENUMERABLE"]
+	}
+	subgraph cluster5{
+		label="Set 5 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)";
+		rel17 [label="rel#17:LogicalSort\ninput=RelSubset#16,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC\nrows=237.75, cost={inf}",shape=box]
+		rel20 [label="rel#20:AbstractConverter\ninput=RelSubset#18,convention=ENUMERABLE\nrows=237.75, cost={inf}",shape=box]
+		rel36 [label="rel#36:EnumerableSort\ninput=RelSubset#35,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC\nrows=225.0, cost={1366.517018598809 rows, 36048.942171903866 cpu, 0.0 io}",color=blue,shape=box]
+		subset18 [label="rel#18:RelSubset#5.NONE"]
+		subset19 [label="rel#19:RelSubset#5.ENUMERABLE"]
+	}
+	subgraph cluster6{
+		label="Set 6 RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel30 [label="rel#30:LogicalFilter\ninput=RelSubset#10,condition==($2, 'F')\nrows=15.0, cost={inf}",shape=box]
+		rel43 [label="rel#43:LogicalCalc\ninput=RelSubset#10,expr#0..8={inputs},expr#9='F':VARCHAR,expr#10==($t2, $t9),proj#0..8={exprs},$condition=$t10\nrows=15.0, cost={inf}",shape=box]
+		rel54 [label="rel#54:EnumerableCalc\ninput=RelSubset#24,expr#0..8={inputs},expr#9='F':VARCHAR,expr#10==($t2, $t9),proj#0..8={exprs},$condition=$t10\nrows=15.0, cost={115.0 rows, 2201.0 cpu, 0.0 io}",color=blue,shape=box]
+		subset32 [label="rel#32:RelSubset#6.NONE"]
+		subset44 [label="rel#44:RelSubset#6.ENUMERABLE"]
+	}
+	subgraph cluster7{
+		label="Set 7 RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment, INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)";
+		rel37 [label="rel#37:LogicalJoin\nleft=RelSubset#10,right=RelSubset#9,condition==($9, $1),joinType=right\nrows=1585.0, cost={inf}",shape=box]
+		rel49 [label="rel#49:EnumerableHashJoin\nleft=RelSubset#24,right=RelSubset#22,condition==($1, $9),joinType=right\nrows=1585.0, cost={2346.517018598809 rows, 202.0 cpu, 0.0 io}",color=blue,shape=box]
+		rel52 [label="rel#52:MultiJoin\ninput#0=RelSubset#10,input#1=RelSubset#9,joinFilter=true,isFullOuterJoin=false,joinTypes=[RIGHT, INNER],outerJoinConditions=[=($9, $1), NULL],projFields=[ALL, ALL]\nrows=1.0, cost={inf}",shape=box]
+		subset39 [label="rel#39:RelSubset#7.NONE"]
+		subset50 [label="rel#50:RelSubset#7.ENUMERABLE"]
+	}
+	root -> subset19;
+	subset9 -> rel1;
+	subset22 -> rel21[color=blue];
+	subset10 -> rel3;
+	subset24 -> rel23[color=blue];
+	subset12 -> rel11; rel11 -> subset9[label="0"]; rel11 -> subset10[label="1"];
+	subset26 -> rel25[color=blue]; rel25 -> subset22[color=blue,label="0"]; rel25 -> subset24[color=blue,label="1"];
+	subset12 -> rel28; rel28 -> subset9[label="0"]; rel28 -> subset10[label="1"];
+	subset12 -> rel40; rel40 -> subset39;
+	subset12 -> rel53; rel53 -> subset39;
+	subset26 -> rel60; rel60 -> subset50;
+	subset14 -> rel13; rel13 -> subset12;
+	subset14 -> rel29; rel29 -> subset12;
+	subset14 -> rel33; rel33 -> subset9[label="0"]; rel33 -> subset32[label="1"];
+	subset42 -> rel41; rel41 -> subset26;
+	subset42 -> rel45[color=blue]; rel45 -> subset22[color=blue,label="0"]; rel45 -> subset44[color=blue,label="1"];
+	subset14 -> rel47; rel47 -> subset9[label="0"]; rel47 -> subset32[label="1"];
+	subset16 -> rel15; rel15 -> subset14;
+	subset16 -> rel34; rel34 -> subset14;
+	subset35 -> rel48[color=blue]; rel48 -> subset42[color=blue];
+	subset18 -> rel17; rel17 -> subset16;
+	subset19 -> rel20; rel20 -> subset18;
+	subset19 -> rel36[color=blue]; rel36 -> subset35[color=blue];
+	subset32 -> rel30; rel30 -> subset10;
+	subset32 -> rel43; rel43 -> subset10;
+	subset44 -> rel54[color=blue]; rel54 -> subset24[color=blue];
+	subset39 -> rel37; rel37 -> subset10[label="0"]; rel37 -> subset9[label="1"];
+	subset50 -> rel49[color=blue]; rel49 -> subset24[color=blue,label="0"]; rel49 -> subset22[color=blue,label="1"];
+	subset39 -> rel52; rel52 -> subset10[label="0"]; rel52 -> subset9[label="1"];
+}

@@ -1,0 +1,95 @@
+Root: rel#26:RelSubset#7.ENUMERABLE
+Original rel:
+LogicalProject(subset=[rel#26:RelSubset#7.ENUMERABLE], C_NAME=[$4], O_ORDERKEY=[$5], O_ORDERDATE=[$6], N_NAME=[$1]): rowcount = 3651.25, cumulative cost = {3651.25 rows, 14605.0 cpu, 0.0 io}, id = 24
+  LogicalJoin(subset=[rel#23:RelSubset#6.NONE], condition=[=($0, $7)], joinType=[left]): rowcount = 3651.25, cumulative cost = {3651.25 rows, 0.0 cpu, 0.0 io}, id = 22
+    LogicalTableScan(subset=[rel#13:RelSubset#0.NONE], table=[[NATION]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 1
+    LogicalProject(subset=[rel#21:RelSubset#5.NONE], C_NAME=[$1], O_ORDERKEY=[$8], O_ORDERDATE=[$12], C_NATIONKEY=[$3]): rowcount = 237.75, cumulative cost = {237.75 rows, 951.0 cpu, 0.0 io}, id = 20
+      LogicalFilter(subset=[rel#19:RelSubset#4.NONE], condition=[=($10, 'F')]): rowcount = 237.75, cumulative cost = {237.75 rows, 1585.0 cpu, 0.0 io}, id = 18
+        LogicalJoin(subset=[rel#17:RelSubset#3.NONE], condition=[=($0, $9)], joinType=[left]): rowcount = 1585.0, cumulative cost = {1585.0 rows, 0.0 cpu, 0.0 io}, id = 16
+          LogicalTableScan(subset=[rel#14:RelSubset#1.NONE], table=[[CUSTOMER]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 3
+          LogicalTableScan(subset=[rel#15:RelSubset#2.NONE], table=[[ORDERS]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 5
+
+Sets:
+Set#0, type: RecordType(INTEGER n_nationkey, VARCHAR n_name, INTEGER n_regionkey, VARCHAR n_comment)
+	rel#13:RelSubset#0.NONE, best=null
+		rel#1:LogicalTableScan.NONE(table=[NATION]), rowcount=100.0, cumulative cost={inf}
+Set#1, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)
+	rel#14:RelSubset#1.NONE, best=null
+		rel#3:LogicalTableScan.NONE(table=[CUSTOMER]), rowcount=100.0, cumulative cost={inf}
+Set#2, type: RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#15:RelSubset#2.NONE, best=null
+		rel#5:LogicalTableScan.NONE(table=[ORDERS]), rowcount=100.0, cumulative cost={inf}
+Set#3, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#17:RelSubset#3.NONE, best=null
+		rel#16:LogicalJoin.NONE(left=RelSubset#14,right=RelSubset#15,condition==($0, $9),joinType=left), rowcount=1585.0, cumulative cost={inf}
+Set#4, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#19:RelSubset#4.NONE, best=null
+		rel#18:LogicalFilter.NONE(input=RelSubset#17,condition==($10, 'F')), rowcount=237.75, cumulative cost={inf}
+Set#5, type: RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE, INTEGER C_NATIONKEY)
+	rel#21:RelSubset#5.NONE, best=null
+		rel#20:LogicalProject.NONE(input=RelSubset#19,exprs=[$1, $8, $12, $3]), rowcount=237.75, cumulative cost={inf}
+Set#6, type: RecordType(INTEGER n_nationkey, VARCHAR n_name, INTEGER n_regionkey, VARCHAR n_comment, VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE, INTEGER C_NATIONKEY)
+	rel#23:RelSubset#6.NONE, best=null
+		rel#22:LogicalJoin.NONE(left=RelSubset#13,right=RelSubset#21,condition==($0, $7),joinType=left), rowcount=3651.25, cumulative cost={inf}
+Set#7, type: RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE, VARCHAR N_NAME)
+	rel#25:RelSubset#7.NONE, best=null
+		rel#24:LogicalProject.NONE(input=RelSubset#23,exprs=[$4, $5, $6, $1]), rowcount=3651.25, cumulative cost={inf}
+	rel#26:RelSubset#7.ENUMERABLE, best=null
+		rel#27:AbstractConverter.ENUMERABLE(input=RelSubset#25,convention=ENUMERABLE), rowcount=3651.25, cumulative cost={inf}
+
+Graphviz:
+digraph G {
+	root [style=filled,label="Root"];
+	subgraph cluster0{
+		label="Set 0 RecordType(INTEGER n_nationkey, VARCHAR n_name, INTEGER n_regionkey, VARCHAR n_comment)";
+		rel1 [label="rel#1:LogicalTableScan\ntable=[NATION]\nrows=100.0, cost={inf}",shape=box]
+		subset13 [label="rel#13:RelSubset#0.NONE"]
+	}
+	subgraph cluster1{
+		label="Set 1 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)";
+		rel3 [label="rel#3:LogicalTableScan\ntable=[CUSTOMER]\nrows=100.0, cost={inf}",shape=box]
+		subset14 [label="rel#14:RelSubset#1.NONE"]
+	}
+	subgraph cluster2{
+		label="Set 2 RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel5 [label="rel#5:LogicalTableScan\ntable=[ORDERS]\nrows=100.0, cost={inf}",shape=box]
+		subset15 [label="rel#15:RelSubset#2.NONE"]
+	}
+	subgraph cluster3{
+		label="Set 3 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel16 [label="rel#16:LogicalJoin\nleft=RelSubset#14,right=RelSubset#15,condition==($0, $9),joinType=left\nrows=1585.0, cost={inf}",shape=box]
+		subset17 [label="rel#17:RelSubset#3.NONE"]
+	}
+	subgraph cluster4{
+		label="Set 4 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel18 [label="rel#18:LogicalFilter\ninput=RelSubset#17,condition==($10, 'F')\nrows=237.75, cost={inf}",shape=box]
+		subset19 [label="rel#19:RelSubset#4.NONE"]
+	}
+	subgraph cluster5{
+		label="Set 5 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE, INTEGER C_NATIONKEY)";
+		rel20 [label="rel#20:LogicalProject\ninput=RelSubset#19,exprs=[$1, $8, $12, $3]\nrows=237.75, cost={inf}",shape=box]
+		subset21 [label="rel#21:RelSubset#5.NONE"]
+	}
+	subgraph cluster6{
+		label="Set 6 RecordType(INTEGER n_nationkey, VARCHAR n_name, INTEGER n_regionkey, VARCHAR n_comment, VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE, INTEGER C_NATIONKEY)";
+		rel22 [label="rel#22:LogicalJoin\nleft=RelSubset#13,right=RelSubset#21,condition==($0, $7),joinType=left\nrows=3651.25, cost={inf}",shape=box]
+		subset23 [label="rel#23:RelSubset#6.NONE"]
+	}
+	subgraph cluster7{
+		label="Set 7 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE, VARCHAR N_NAME)";
+		rel24 [label="rel#24:LogicalProject\ninput=RelSubset#23,exprs=[$4, $5, $6, $1]\nrows=3651.25, cost={inf}",shape=box]
+		rel27 [label="rel#27:AbstractConverter\ninput=RelSubset#25,convention=ENUMERABLE\nrows=3651.25, cost={inf}",shape=box]
+		subset25 [label="rel#25:RelSubset#7.NONE"]
+		subset26 [label="rel#26:RelSubset#7.ENUMERABLE",color=red]
+	}
+	root -> subset26;
+	subset13 -> rel1;
+	subset14 -> rel3;
+	subset15 -> rel5;
+	subset17 -> rel16; rel16 -> subset14[label="0"]; rel16 -> subset15[label="1"];
+	subset19 -> rel18; rel18 -> subset17;
+	subset21 -> rel20; rel20 -> subset19;
+	subset23 -> rel22; rel22 -> subset13[label="0"]; rel22 -> subset21[label="1"];
+	subset25 -> rel24; rel24 -> subset23;
+	subset26 -> rel27; rel27 -> subset25;
+}

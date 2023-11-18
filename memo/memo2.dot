@@ -1,0 +1,75 @@
+Root: rel#19:RelSubset#5.ENUMERABLE
+Original rel:
+LogicalSort(subset=[rel#19:RelSubset#5.ENUMERABLE], sort0=[$0], sort1=[$1], dir0=[ASC], dir1=[ASC]): rowcount = 750.0, cumulative cost = {750.0 rows, 119161.31771754642 cpu, 0.0 io}, id = 17
+  LogicalProject(subset=[rel#16:RelSubset#4.NONE], C_NAME=[$1], O_ORDERKEY=[$8], O_ORDERDATE=[$12]): rowcount = 750.0, cumulative cost = {750.0 rows, 2250.0 cpu, 0.0 io}, id = 15
+    LogicalFilter(subset=[rel#14:RelSubset#3.NONE], condition=[<($0, 3)]): rowcount = 750.0, cumulative cost = {750.0 rows, 1500.0 cpu, 0.0 io}, id = 13
+      LogicalJoin(subset=[rel#12:RelSubset#2.NONE], condition=[=($0, $9)], joinType=[inner]): rowcount = 1500.0, cumulative cost = {1500.0 rows, 0.0 cpu, 0.0 io}, id = 11
+        LogicalTableScan(subset=[rel#9:RelSubset#0.NONE], table=[[CUSTOMER]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 1
+        LogicalTableScan(subset=[rel#10:RelSubset#1.NONE], table=[[ORDERS]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 3
+
+Sets:
+Set#0, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)
+	rel#9:RelSubset#0.NONE, best=null
+		rel#1:LogicalTableScan.NONE(table=[CUSTOMER]), rowcount=100.0, cumulative cost={inf}
+Set#1, type: RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#10:RelSubset#1.NONE, best=null
+		rel#3:LogicalTableScan.NONE(table=[ORDERS]), rowcount=100.0, cumulative cost={inf}
+Set#2, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#12:RelSubset#2.NONE, best=null
+		rel#11:LogicalJoin.NONE(left=RelSubset#9,right=RelSubset#10,condition==($0, $9),joinType=inner), rowcount=1500.0, cumulative cost={inf}
+Set#3, type: RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)
+	rel#14:RelSubset#3.NONE, best=null
+		rel#13:LogicalFilter.NONE(input=RelSubset#12,condition=<($0, 3)), rowcount=750.0, cumulative cost={inf}
+Set#4, type: RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)
+	rel#16:RelSubset#4.NONE, best=null
+		rel#15:LogicalProject.NONE(input=RelSubset#14,exprs=[$1, $8, $12]), rowcount=750.0, cumulative cost={inf}
+Set#5, type: RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)
+	rel#18:RelSubset#5.NONE, best=null
+		rel#17:LogicalSort.NONE(input=RelSubset#16,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC), rowcount=750.0, cumulative cost={inf}
+	rel#19:RelSubset#5.ENUMERABLE, best=null
+		rel#20:AbstractConverter.ENUMERABLE(input=RelSubset#18,convention=ENUMERABLE), rowcount=750.0, cumulative cost={inf}
+
+Graphviz:
+digraph G {
+	root [style=filled,label="Root"];
+	subgraph cluster0{
+		label="Set 0 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment)";
+		rel1 [label="rel#1:LogicalTableScan\ntable=[CUSTOMER]\nrows=100.0, cost={inf}",shape=box]
+		subset9 [label="rel#9:RelSubset#0.NONE"]
+	}
+	subgraph cluster1{
+		label="Set 1 RecordType(INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel3 [label="rel#3:LogicalTableScan\ntable=[ORDERS]\nrows=100.0, cost={inf}",shape=box]
+		subset10 [label="rel#10:RelSubset#1.NONE"]
+	}
+	subgraph cluster2{
+		label="Set 2 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel11 [label="rel#11:LogicalJoin\nleft=RelSubset#9,right=RelSubset#10,condition==($0, $9),joinType=inner\nrows=1500.0, cost={inf}",shape=box]
+		subset12 [label="rel#12:RelSubset#2.NONE"]
+	}
+	subgraph cluster3{
+		label="Set 3 RecordType(INTEGER c_custkey, VARCHAR c_name, VARCHAR c_address, INTEGER c_nationkey, VARCHAR c_phone, DOUBLE c_acctbal, VARCHAR c_mktsegment, VARCHAR c_comment, INTEGER o_orderkey, INTEGER o_custkey, VARCHAR o_orderstatus, DOUBLE o_totalprice, DATE o_orderdate, VARCHAR o_orderpriority, VARCHAR o_clerk, INTEGER o_shippriority, VARCHAR o_comment)";
+		rel13 [label="rel#13:LogicalFilter\ninput=RelSubset#12,condition=<($0, 3)\nrows=750.0, cost={inf}",shape=box]
+		subset14 [label="rel#14:RelSubset#3.NONE"]
+	}
+	subgraph cluster4{
+		label="Set 4 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)";
+		rel15 [label="rel#15:LogicalProject\ninput=RelSubset#14,exprs=[$1, $8, $12]\nrows=750.0, cost={inf}",shape=box]
+		subset16 [label="rel#16:RelSubset#4.NONE"]
+	}
+	subgraph cluster5{
+		label="Set 5 RecordType(VARCHAR C_NAME, INTEGER O_ORDERKEY, DATE O_ORDERDATE)";
+		rel17 [label="rel#17:LogicalSort\ninput=RelSubset#16,sort0=$0,sort1=$1,dir0=ASC,dir1=ASC\nrows=750.0, cost={inf}",shape=box]
+		rel20 [label="rel#20:AbstractConverter\ninput=RelSubset#18,convention=ENUMERABLE\nrows=750.0, cost={inf}",shape=box]
+		subset18 [label="rel#18:RelSubset#5.NONE"]
+		subset19 [label="rel#19:RelSubset#5.ENUMERABLE",color=red]
+	}
+	root -> subset19;
+	subset9 -> rel1;
+	subset10 -> rel3;
+	subset12 -> rel11; rel11 -> subset9[label="0"]; rel11 -> subset10[label="1"];
+	subset14 -> rel13; rel13 -> subset12;
+	subset16 -> rel15; rel15 -> subset14;
+	subset18 -> rel17; rel17 -> subset16;
+	subset19 -> rel20; rel20 -> subset18;
+}
